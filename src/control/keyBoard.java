@@ -80,7 +80,14 @@ public class keyBoard extends KeyAdapter{
 		if(e.getKeyCode()==KeyEvent.VK_S) {
 			gameBoard.Music();
 		}
-		
+		if(e.getKeyCode()==KeyEvent.VK_Z) {
+			gameBoard.undo();
+			gamePanel.repaint();
+		}
+		if(e.getKeyCode()==KeyEvent.VK_Y) {
+			gameBoard.redo();
+			gamePanel.repaint();
+		}
 	}
 
 	@Override

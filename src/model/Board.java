@@ -1,7 +1,7 @@
 package model;
 
 import java.util.Random;
-import java.util.Scanner;
+import java.util.Stack;
 
 import javax.sound.sampled.Clip;
 
@@ -18,6 +18,8 @@ public class Board {
 	protected Sound sound;
 	protected int count = 0;
 	protected boolean gameOn = true;
+	private Stack<Tile[][]> boardHistory = new Stack<>();
+	private Stack<Tile[][]> redoBoard = new Stack<>();
 
 	public Board() {
 		board = new Tile[ROWS][COLS];
@@ -105,6 +107,7 @@ public class Board {
 //dich chuyen
 	public void moveTiles(Direction dir) {
 		boolean canMove = false;// bien co the di chuyen
+		saveBoard(boardHistory);
 		int horizontalDirection = 0;// huong di chuyen theo chieu ngang
 		int verticalDirection = 0;// huong di chuyen theo chieu doc
 		sound.play("ting.wav", 0);
@@ -263,7 +266,7 @@ public class Board {
 	}
 
 	public void show() {
-		System.out.println("-----------"+score+"-------------");
+		System.out.println("-----------" + score + "-------------");
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (board[i][j] != null)
@@ -310,7 +313,38 @@ public class Board {
 //		}
 //		sc.close();
 //	}
-
+	private void saveBoard(Stack<Tile[][]> add) {
+		Tile[][] prevBoard = new Tile[ROWS][COLS];
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				prevBoard[i][j] = board[i][j];
+			}
+		}
+		add.push(prevBoard);
+	}
+	public void undo() {
+		if (!boardHistory.isEmpty()) { // kiểm tra xem stack lịch sử còn trống không
+//				saveBoard(redoBoard);
+			redoBoard.push(board);
+			board = boardHistory.pop();
+			// lấy trạng thái trước đó từ stack và khôi phục lại trạng thái của bàn chơi
+		} else {
+			board = new Tile[ROWS][COLS];
+			addTile();
+			addTile();
+		}
+		if (!gameOn)
+			gameOn = true;
+	}
+	public void redo() {
+		if (!redoBoard.isEmpty()) { // kiểm tra xem stack lịch sử còn trống không
+			boardHistory.push(board);
+			board = redoBoard.pop();
+			// lấy trạng thái trước đó từ stack và khôi phục lại trạng thái của bàn chơi
+		}
+		if (!gameOn)
+			gameOn = true;
+	}
 	public boolean isWin() {
 		return win;
 	}
