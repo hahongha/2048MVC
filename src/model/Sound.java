@@ -54,16 +54,18 @@ public class Sound {
 	protected void stop(String name) {
 		if(sound.get(name).isRunning()) {
 			sound.get(name).stop();
+			System.out.println("stop");
 		}
 	}
 	protected void start(String name) {
 		if(!sound.get(name).isRunning()) {
 		sound.get(name).start();
+		System.out.println(sound.get(name).toString());
 		}
 	}
 	protected void change(String name) {
 		if(sound.get(name).isRunning()) {
-			sound.get(name).stop();
+			stop(name);
 		}else start(name);
 	}
 	

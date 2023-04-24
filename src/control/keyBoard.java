@@ -1,13 +1,14 @@
 package control;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import model.Board;
 import model.Direction;
+import utils.FileInput;
 import view.GamePanel;
 
-public class keyBoard implements KeyListener{
+public class keyBoard extends KeyAdapter{
 	private GamePanel gamePanel;
 	private Board gameBoard;
 	
@@ -57,6 +58,27 @@ public class keyBoard implements KeyListener{
 			gameBoard.reset();
 			gameBoard.setGameOn(true);
 			gamePanel.repaint();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_X) {
+			gameBoard.setDead(true);
+			FileInput.writeBoard(gameBoard);
+			System.exit(0);
+		}
+		if(e.getKeyCode()== KeyEvent.VK_P) {
+			if(gameBoard.isGameOn()) 
+				{
+				gameBoard.setGameOn(false);
+//				FileInput.writeBoard(gameBoard);
+				}
+			else {
+				gameBoard.setGameOn(true);
+				FileInput.readBoard();
+				
+			}
+			gamePanel.repaint();
+		}
+		if(e.getKeyCode()==KeyEvent.VK_S) {
+			gameBoard.Music();
 		}
 		
 	}

@@ -3,9 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
@@ -29,17 +26,31 @@ public class GamePanel extends JPanel{
 
 	private keyBoard key;
 
-	public GamePanel() {
+	public GamePanel(Board board) {
 		setSize(Game2048.WIDTH, Game2048.HEIGHT);
 		setFocusable(true);
-		gameBoard = new Board();
+		setLayout(null);
+		gameBoard = board;
 		key = new keyBoard(this, gameBoard);
 		addKeyListener(key);
 		setBackground(new Color(0x61876E));
+		
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		if (gameBoard.isGameOn()) {
+			renderPlay(g);
+		} else {
+			renderEnd(g, Game2048.WIDTH, Game2048.HEIGHT);
+		}
+	}
+
+	// ve o
+
+	private void renderPlay(Graphics g) {
 		g.setColor(new Color(0x61876E));
 		g.fillRect(0, 0, Game2048.WIDTH, Game2048.HEIGHT);
 		g.setColor(new Color(0x3C6255));
@@ -54,7 +65,6 @@ public class GamePanel extends JPanel{
 		g.setFont(new Font("NewellsHand", Font.BOLD, 17));
 		g.drawString("SCORE", 220, 100);
 		g.drawString("HIGH SCORE", 330, 100);
-		g.drawString("NEW", 100, 110);
 
 		g.setFont(new Font("NewellsHand", Font.PLAIN, 20));
 		if (gameBoard.getScore() < 10)
@@ -74,17 +84,6 @@ public class GamePanel extends JPanel{
 			g.drawString("" + gameBoard.getHighScore(), 370, 125);
 		else if (gameBoard.getHighScore() >= 1000)
 			g.drawString("" + gameBoard.getHighScore(), 365, 125);
-
-		if (gameBoard.isGameOn()) {
-			renderPlay(g);
-		} else {
-			renderEnd(g, Game2048.WIDTH, Game2048.HEIGHT);
-		}
-	}
-
-	// ve o
-
-	private void renderPlay(Graphics g) {
 		int y = Game2048.HEIGHT - BOARD_HEIGHT - 40;
 		g.setColor(new Color(0x61876E));
 		g.fillRect(0, y, BOARD_WIDTH, BOARD_HEIGHT);
@@ -104,25 +103,29 @@ public class GamePanel extends JPanel{
 					g.setColor(current.setBackGround());
 					g.drawRoundRect(getTileX(i), y + getTileY(j), TILE_WIDTH, TILE_HEIGHT, ARC_WIDTH, ARC_HEIGHT);
 					g.fillRoundRect(getTileX(i), y + getTileY(j), TILE_WIDTH, TILE_HEIGHT, ARC_WIDTH, ARC_HEIGHT);
-					g.setColor(Color.BLACK);
 					g.setFont(current.setFont());
 					// nho can lai le
-					g.drawString("" + current.getValue(), getTileX(i) + TILE_WIDTH / 2 - 15,
-							y + getTileY(j) + TILE_HEIGHT / 2 - 15);
+					g.setColor(current.setText());
+					g.drawString("" + current.getValue(),
+							getTileX(i) + TILE_WIDTH / 2
+									- DrawUtils.getMessageWidth("" + current.getValue(), current.setFont(), g) / 2,
+							y + getTileY(j) + TILE_HEIGHT / 2
+									+ DrawUtils.getMessageHeight("" + current.getValue(), current.setFont(), g) / 2);
 				}
 			}
 		}
+		g.dispose();
 	}
 
 	private void renderEnd(Graphics g, int width, int height) {
-		g.setColor(Color.white);
-		g.fillRect(0, 0, width, height);
 		Font fontString = new Font("Monospaced", Font.BOLD, 50);
 		Font fontforScore = new Font("Monospaced", Font.BOLD, 40);
 		// can giua
 		int y = height / 3;
 		g.setFont(fontString);
 		if (gameBoard.isWin()) {
+			g.setColor(Color.white);
+			g.fillRect(0, 0, width, height);
 			int x1 = width / 2 - DrawUtils.getMessageWidth("You Win", fontString, g) / 2;
 			g.setColor(new Color(209, 77, 114));
 			g.drawString("You Win", x1, y);
@@ -140,6 +143,8 @@ public class GamePanel extends JPanel{
 			g.drawString("" + gameBoard.getScore(),
 					width / 2 - DrawUtils.getMessageWidth("" + gameBoard.getScore(), fontString, g) / 2, y + 150);
 		} else if (gameBoard.isDead()) {
+			g.setColor(Color.white);
+			g.fillRect(0, 0, width, height);
 			int x1 = width / 2 - DrawUtils.getMessageWidth("Game Over", fontString, g) / 2;
 			g.setColor(new Color(122, 168, 116));
 			g.drawString("Game Over", x1, y);
@@ -156,12 +161,20 @@ public class GamePanel extends JPanel{
 			g.setFont(fontforScore);
 			g.drawString("" + gameBoard.getScore(),
 					width / 2 - DrawUtils.getMessageWidth("" + gameBoard.getScore(), fontString, g) / 2, y + 150);
+		} else {
+			g.setColor(Color.BLACK);
+			fontforScore = fontforScore.deriveFont(25f);
+			g.setFont(fontforScore);
+			g.drawString("Press P to continue",
+					width / 2 - DrawUtils.getMessageWidth("Press P to continue", fontforScore, g) / 2, y + 100);
 		}
 		g.setColor(Color.BLACK);
 		fontforScore = fontforScore.deriveFont(25f);
 		g.setFont(fontforScore);
-		g.drawString("Press N to continue",
-				width / 2 - DrawUtils.getMessageWidth("Press N to continue", fontforScore, g) / 2, y + 190);
+		g.drawString("Press N to reset game",
+				width / 2 - DrawUtils.getMessageWidth("Press N to reset game", fontforScore, g) / 2, y + 190);
+		g.drawString("Press X to save game and exit",
+				width / 2 - DrawUtils.getMessageWidth("Press X to save and exit game", fontforScore, g) / 2, y + 280);
 
 		g.dispose();
 
@@ -182,5 +195,4 @@ public class GamePanel extends JPanel{
 	public void setGameBoard(Board gameBoard) {
 		this.gameBoard = gameBoard;
 	}
-
 }

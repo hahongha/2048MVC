@@ -11,7 +11,6 @@ public class Tile {
 	}
 
 	public Tile(int value, int row, int col) {
-		super();
 		this.value = value;
 		this.row = row;
 		this.col = col;
@@ -94,7 +93,7 @@ public class Tile {
 		if (value <= 64) {
 			font = font.deriveFont(45f);
 		} else {
-			font = font.deriveFont(40f);
+			font = font.deriveFont(35f);
 		}
 		return font;
 	}
