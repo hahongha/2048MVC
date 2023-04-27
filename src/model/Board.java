@@ -24,6 +24,7 @@ public class Board {
 	public Board() {
 		board = new Tile[ROWS][COLS];
 		sound = new Sound();
+		sound.play("piano.wav", Clip.LOOP_CONTINUOUSLY);
 		addTile();
 		addTile();
 	}
@@ -32,6 +33,7 @@ public class Board {
 		this.board = b;
 		this.score = score;
 		sound = new Sound();
+		sound.play("piano.wav", Clip.LOOP_CONTINUOUSLY);
 		addTile();
 		addTile();
 		gameOn = true;

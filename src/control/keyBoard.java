@@ -61,19 +61,20 @@ public class keyBoard extends KeyAdapter{
 		}
 		if(e.getKeyCode() == KeyEvent.VK_X) {
 			gameBoard.setDead(true);
+			gameBoard.setGameOn(false);
+			gamePanel.repaint();
 			FileInput.writeBoard(gameBoard);
-			System.exit(0);
+//			System.exit(0);
 		}
 		if(e.getKeyCode()== KeyEvent.VK_P) {
 			if(gameBoard.isGameOn()) 
 				{
 				gameBoard.setGameOn(false);
-//				FileInput.writeBoard(gameBoard);
+				FileInput.writeBoard(gameBoard);
 				}
 			else {
 				gameBoard.setGameOn(true);
 				FileInput.readBoard();
-				
 			}
 			gamePanel.repaint();
 		}
@@ -92,7 +93,6 @@ public class keyBoard extends KeyAdapter{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

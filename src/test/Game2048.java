@@ -16,7 +16,7 @@ public class Game2048 {
 	public static final int WIDTH = 460;
 	public static final int HEIGHT = 700;
 	public JFrame window;
-	private GamePanel game;
+	public GamePanel game;
 	private Title title;
 	private changePanel change;
 	public Game2048() {
@@ -39,7 +39,6 @@ public class Game2048 {
 		btnCon.setBounds(Game2048.WIDTH/4, Game2048.HEIGHT*2/3,Game2048.WIDTH/2,70);
         title.add(next);
         title.add(btnCon);
-        
 		window.add(title);
 		
 		window.setVisible(true);// hien thi

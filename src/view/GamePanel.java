@@ -36,7 +36,6 @@ public class GamePanel extends JPanel{
 		setBackground(new Color(0x61876E));
 		
 	}
-
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -47,7 +46,6 @@ public class GamePanel extends JPanel{
 			renderEnd(g, Game2048.WIDTH, Game2048.HEIGHT);
 		}
 	}
-
 	// ve o
 
 	private void renderPlay(Graphics g) {

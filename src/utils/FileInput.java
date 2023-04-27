@@ -95,8 +95,10 @@ public class FileInput {
 						
 						try {
 						int a = Integer.parseInt(b[i]);
-							tiles[row][col] = new Tile(a, row, col);
+						if(a!= 0) tiles[row][col] = new Tile(a, row, col);
+						else tiles[row][col] = new Tile();
 						}catch (NumberFormatException e) {
+							tiles[row][col]= new Tile(16,row, col);
 							continue;
 						}
 					}
@@ -167,7 +169,7 @@ public class FileInput {
 				}
 			}
 		}
-		private static void deleteFile() {
+		public static void deleteFile() {
 			File file = new File(saveDataPath + "saveBoard.txt");
 			if(file.exists()) {
 				if(file.delete()) System.out.println("da xoa file");

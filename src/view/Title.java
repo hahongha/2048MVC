@@ -28,7 +28,7 @@ public class Title extends JPanel{
 	}
 	@Override
 	public void paintComponent(Graphics g) {
-		
+		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.drawRect(Game2048.WIDTH/3, Game2048.HEIGHT/2,Game2048.WIDTH/3,70);
 		g.drawString("PLAY", Game2048.WIDTH/2-DrawUtils.getMessageWidth("PLAY", font, g)/2,
