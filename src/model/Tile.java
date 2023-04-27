@@ -56,6 +56,8 @@ public class Tile {
 			background = new Color(0x4e09b);
 		} else if (value == 2048) {
 			background = new Color(0x252A34);
+		} else {
+			background = new Color(0x3C6255);
 		}
 		return background;
 	}
@@ -83,8 +85,8 @@ public class Tile {
 			text = new Color(0xffffff);
 		} else if (value == 2048) {
 			text = new Color(0xffffff);
-		} else {
-			text = Color.white;
+		}else {
+			text = new Color(0x3C6255);
 		}
 		return text;
 	}

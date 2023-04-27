@@ -24,20 +24,18 @@ public class Board {
 	public Board() {
 		board = new Tile[ROWS][COLS];
 		sound = new Sound();
-		sound.play("piano.wav", Clip.LOOP_CONTINUOUSLY);
 		addTile();
 		addTile();
 	}
 
-	public Board(Tile[][] b, int score) {
-		this.board = b;
-		this.score = score;
-		sound = new Sound();
-		sound.play("piano.wav", Clip.LOOP_CONTINUOUSLY);
-		addTile();
-		addTile();
-		gameOn = true;
-	}
+//	public Board(Tile[][] b, int score) {
+//		this.board = b;
+//		this.score = score;
+//		sound = new Sound();
+//		addTile();
+//		addTile();
+//		gameOn = true;
+//	}
 
 //them ngau nhien
 	protected void addTile() {
@@ -386,14 +384,18 @@ public class Board {
 	public void setHighScore(int highScore) {
 		this.highScore = highScore;
 	}
-
-	public void Music() {
-		sound.change("piano.wav");
-	}
 	/*
 	0    0    0    16  
 	0    16  32  256  
 	0    0    128  64  
 	128  16  64  16
 	 */
+
+	public Sound getSound() {
+		return sound;
+	}
+
+	public void setSound(Sound sound) {
+		this.sound = sound;
+	}
 }

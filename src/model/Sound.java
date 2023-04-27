@@ -13,7 +13,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
 	private HashMap< String , Clip> sound;
-//	private static Clip[] clip;
 	public Sound() {
 		sound = new HashMap<String, Clip>();
 		openClip("ting.wav");
@@ -21,6 +20,7 @@ public class Sound {
 		openClip("victory.wav");
 		openClip("lose.wav");
 	}
+	//mo file nhac
 	private void openClip(String name){
 		String path = System.getProperty("user.dir") + File.separator + "bin" + File.separator+"lib"+ File.separator+ name;
 		AudioInputStream inputStream = null;
@@ -41,7 +41,7 @@ public class Sound {
 				e.printStackTrace();
 			}
 	}
-	
+	//bat dau choi nhac
 	public void play(String name, int loop) {
 		if(sound.get(name).isRunning()) {
 			sound.get(name).stop();
@@ -51,24 +51,34 @@ public class Sound {
 		sound.get(name).loop(loop);
 		System.out.println(name);
 	}
-	protected void stop(String name) {
+	//dung nhac
+	public void stop(String name) {
 		if(sound.get(name).isRunning()) {
 			sound.get(name).stop();
 			System.out.println("stop");
 		}
 	}
-	protected void start(String name) {
+	//tiep tuc
+	public void start(String name) {
 		if(!sound.get(name).isRunning()) {
 		sound.get(name).start();
 		System.out.println(sound.get(name).toString());
 		}
 	}
-	protected void change(String name) {
-		if(sound.get(name).isRunning()) {
-			stop(name);
-		}else start(name);
+	//bat tat nhac
+	public void change() {
+		if(sound.get("piano.wav").isRunning()||sound.get("lose.wav").isRunning()||sound.get("victory.wav").isRunning()) {
+			stop("piano.wav");
+			sound.get("ting.wav").close();
+			sound.get("lose.wav").close();
+			sound.get("victory.wav").close();
+		}else {
+			start("piano.wav");
+			openClip("ting.wav");
+			openClip("victory.wav");
+			openClip("lose.wav");
+		}
 	}
-	
 	protected void changeVolume(String name, float value) {
 		FloatControl fc = (FloatControl) sound.get(name).getControl(FloatControl.Type.MASTER_GAIN);
 		fc.setValue(value);
@@ -77,4 +87,5 @@ public class Sound {
 		FloatControl fc = (FloatControl) sound.get(name).getControl(FloatControl.Type.MASTER_GAIN);
 		return fc.getValue();
 	}
+	
 }

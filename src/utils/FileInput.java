@@ -90,8 +90,8 @@ public class FileInput {
 					return new Tile[Board.ROWS][Board.COLS];
 					}
 					for (int i = 0; i <Board.ROWS* Board.COLS ; i++) {
-						int row = i/Board.COLS;
-						int col = i/Board.ROWS;
+						int row = i/Board.ROWS;
+						int col = i%Board.COLS;
 						
 						try {
 						int a = Integer.parseInt(b[i]);
@@ -176,4 +176,11 @@ public class FileInput {
 				else System.out.println("khong xoa dc");
 			}else System.out.println("file khong ton tai");
 		}
+//		public static void main(String[] args) {
+//			Tile[][] board = readBoard();
+//			Board board1 = new Board();
+//			board1.setBoard(board);
+//			board1.setScore(score);
+//			board1.show();
+//		}
 }

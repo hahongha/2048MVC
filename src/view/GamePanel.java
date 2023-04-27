@@ -16,7 +16,7 @@ public class GamePanel extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	protected Board gameBoard;
-	public static final int TILE_WIDTH = 100;
+	public static final int TILE_WIDTH =100;
 	public static final int TILE_HEIGHT = 100;
 	public static int SPACING = TILE_WIDTH / 10; // khoảng cách giữa các ô
 	public static int BOARD_WIDTH = (Board.COLS + 1) * SPACING + Board.COLS * TILE_WIDTH;
@@ -34,7 +34,8 @@ public class GamePanel extends JPanel{
 		key = new keyBoard(this, gameBoard);
 		addKeyListener(key);
 		setBackground(new Color(0x61876E));
-		
+//		if(gameBoard.isGameOn())
+//		gameBoard.getSound().play("piano.wav", 1);
 	}
 	@Override
 	public void paintComponent(Graphics g) {
@@ -85,7 +86,6 @@ public class GamePanel extends JPanel{
 		int y = Game2048.HEIGHT - BOARD_HEIGHT - 40;
 		g.setColor(new Color(0x61876E));
 		g.fillRect(0, y, BOARD_WIDTH, BOARD_HEIGHT);
-		g.setColor(Color.GREEN);
 		// ve bang
 		for (int j = 0; j < Board.COLS; j++) {
 			for (int i = 0; i < Board.ROWS; i++) {
@@ -171,8 +171,8 @@ public class GamePanel extends JPanel{
 		g.setFont(fontforScore);
 		g.drawString("Press N to reset game",
 				width / 2 - DrawUtils.getMessageWidth("Press N to reset game", fontforScore, g) / 2, y + 190);
-		g.drawString("Press X to save game and exit",
-				width / 2 - DrawUtils.getMessageWidth("Press X to save and exit game", fontforScore, g) / 2, y + 280);
+		g.drawString("Press X to exit game",
+				width / 2 - DrawUtils.getMessageWidth("Press X to exit game", fontforScore, g) / 2, y + 280);
 
 		g.dispose();
 

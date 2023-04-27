@@ -60,11 +60,13 @@ public class keyBoard extends KeyAdapter{
 			gamePanel.repaint();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_X) {
+			if(gameBoard.isGameOn()) {
 			gameBoard.setDead(true);
-			gameBoard.setGameOn(false);
-			gamePanel.repaint();
 			FileInput.writeBoard(gameBoard);
-//			System.exit(0);
+			gameBoard.setGameOn(false);
+			}
+			gamePanel.repaint();
+			System.exit(0);
 		}
 		if(e.getKeyCode()== KeyEvent.VK_P) {
 			if(gameBoard.isGameOn()) 
@@ -74,20 +76,11 @@ public class keyBoard extends KeyAdapter{
 				}
 			else {
 				gameBoard.setGameOn(true);
-				FileInput.readBoard();
 			}
 			gamePanel.repaint();
 		}
 		if(e.getKeyCode()==KeyEvent.VK_S) {
-			gameBoard.Music();
-		}
-		if(e.getKeyCode()==KeyEvent.VK_Z) {
-			gameBoard.undo();
-			gamePanel.repaint();
-		}
-		if(e.getKeyCode()==KeyEvent.VK_Y) {
-			gameBoard.redo();
-			gamePanel.repaint();
+//			gameBoard.getSound().change();
 		}
 	}
 
