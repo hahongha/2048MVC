@@ -1,14 +1,14 @@
 package control;
 
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import model.Board;
 import model.Direction;
 import utils.FileInput;
 import view.GamePanel;
 
-public class keyBoard extends KeyAdapter{
+public class keyBoard implements KeyListener{
 	private GamePanel gamePanel;
 	private Board gameBoard;
 	
@@ -54,6 +54,34 @@ public class keyBoard extends KeyAdapter{
 			gamePanel.repaint();
 			}
 		}
+		if(e.getKeyCode()==KeyEvent.VK_9) {
+			if(gameBoard.isGameOn()) {
+			gameBoard.moveTiles(Direction.cheo9);
+			gameBoard.show();
+			gamePanel.repaint();
+			}
+		}
+		if(e.getKeyCode()==KeyEvent.VK_7) {
+			if(gameBoard.isGameOn()) {
+			gameBoard.moveTiles(Direction.cheo7);
+			gameBoard.show();
+			gamePanel.repaint();
+			}
+		}
+		if(e.getKeyCode()==KeyEvent.VK_1) {
+			if(gameBoard.isGameOn()) {
+			gameBoard.moveTiles(Direction.cheo1);
+			gameBoard.show();
+			gamePanel.repaint();
+			}
+		}
+		if(e.getKeyCode()==KeyEvent.VK_3) {
+			if(gameBoard.isGameOn()) {
+			gameBoard.moveTiles(Direction.cheo3);
+			gameBoard.show();
+			gamePanel.repaint();
+			}
+		}
 		if(e.getKeyCode()==KeyEvent.VK_N) {
 			gameBoard.reset();
 			gameBoard.setGameOn(true);
@@ -80,8 +108,22 @@ public class keyBoard extends KeyAdapter{
 			gamePanel.repaint();
 		}
 		if(e.getKeyCode()==KeyEvent.VK_S) {
-//			gameBoard.getSound().change();
+			gameBoard.getSound().change();
 		}
+		
+		if(e.getKeyCode()==KeyEvent.VK_Z) {
+			gameBoard.undo();
+			gamePanel.repaint();
+		}
+		if(e.getKeyCode()==KeyEvent.VK_Y) {
+			gameBoard.redo();
+			gamePanel.repaint();
+		}
+		if(e.getKeyCode()==KeyEvent.VK_M) {
+			gameBoard.mixTile();
+			gamePanel.repaint();
+		}
+		
 	}
 
 	@Override

@@ -7,6 +7,7 @@ public class Tile {
 	private int value;
 	private int row;
 	private int col;
+	private boolean lucky;
 	public Tile() {
 	}
 
@@ -14,9 +15,15 @@ public class Tile {
 		this.value = value;
 		this.row = row;
 		this.col = col;
+		this.lucky= false;
 	}
-
-
+	
+	public Tile(int value, int row, int col, boolean lucky) {
+		this.value = value;
+		this.row = row;
+		this.col = col;
+		this.lucky = lucky;
+	}
 
 	public int getValue() {
 		return value;
@@ -34,6 +41,8 @@ public class Tile {
 
 	public Color setBackGround() {
 		Color background = new Color(0);
+		if(lucky== true) background= new Color(0xFF3333);
+		else {
 		if (value == 2) {
 			background = new Color(0xFD8A8A);
 		} else if (value == 4) {
@@ -43,6 +52,8 @@ public class Tile {
 		} else if (value == 16) {
 			background = new Color(0x9EA1D4);
 		} else if (value == 32) {
+			background = new Color(0xFEA1BF);
+		} else if (value == 48) {
 			background = new Color(0xFEA1BF);
 		} else if (value == 64) {
 			background = new Color(0xE5BA73);
@@ -56,11 +67,15 @@ public class Tile {
 			background = new Color(0x4e09b);
 		} else if (value == 2048) {
 			background = new Color(0x252A34);
-		} else {
+		} else if(value == 0) {
 			background = new Color(0x3C6255);
+		} else {
+			background = new Color(0x252A34);
+		}
 		}
 		return background;
 	}
+
 	public Color setText() {
 		Color text = new Color(0);
 		if (value == 2) {
@@ -85,11 +100,14 @@ public class Tile {
 			text = new Color(0xffffff);
 		} else if (value == 2048) {
 			text = new Color(0xffffff);
-		}else {
+		}else if(value==0) {
 			text = new Color(0x3C6255);
+		}else {
+			text = new Color(0xffffff);
 		}
 		return text;
 	}
+	//font of tile
 	public Font setFont() {
 		Font font = new Font("Bebas Neue Regular", Font.PLAIN, 28);
 		if (value <= 64) {
@@ -122,5 +140,13 @@ public class Tile {
 
 	public void setCol(int col) {
 		this.col = col;
+	}
+
+	public boolean isLucky() {
+		return lucky;
+	}
+
+	public void setLucky(boolean lucky) {
+		this.lucky = lucky;
 	}
 }

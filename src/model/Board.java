@@ -6,20 +6,27 @@ import java.util.Stack;
 import javax.sound.sampled.Clip;
 
 import utils.FileInput;
-
+//di chuyen 3 o
+//them luckyTile
+//theo cac huong di cheo
+//count
+//thay doi cach ghep so lien nhau
 public class Board {
 	protected Tile[][] board;
 	protected int score = 0;
 	protected int highScore = FileInput.highScore();
 	protected boolean win = false;
-	public boolean dead = false;
+	protected boolean dead = false;
 	public static final int ROWS = 4;
 	public static final int COLS = 4;
 	protected Sound sound;
-	protected int count = 0;
 	protected boolean gameOn = true;
 	private Stack<Tile[][]> boardHistory = new Stack<>();
 	private Stack<Tile[][]> redoBoard = new Stack<>();
+	private Stack <Integer> ScoreHistory = new Stack<Integer>();
+	private Stack <Integer> redoScore = new Stack<Integer>();
+	int count=0;
+
 
 	public Board() {
 		board = new Tile[ROWS][COLS];
@@ -28,17 +35,8 @@ public class Board {
 		addTile();
 	}
 
-//	public Board(Tile[][] b, int score) {
-//		this.board = b;
-//		this.score = score;
-//		sound = new Sound();
-//		addTile();
-//		addTile();
-//		gameOn = true;
-//	}
-
 //them ngau nhien
-	protected void addTile() {
+	private void addTile() {
 		Random random = new Random();
 		boolean notValid = true;
 
@@ -56,7 +54,66 @@ public class Board {
 			}
 		}
 	}
+	private void addTile2(int value, Tile[][]newBoard,boolean lucky) {
+		Random random = new Random();
+		boolean notValid = true;
 
+		while (notValid) {// kiem tra o trong
+			// chuyen doi tu 1 chieu sang 2 chieu
+			int location = random.nextInt(ROWS * COLS);
+			int row = location / COLS;
+			int col = location % ROWS;
+			Tile current = newBoard[row][col];
+			if (current == null) {// kiểm tra vị trí hiện tại có ô nào không
+				Tile tile = new Tile(value, row, col,lucky);
+				newBoard[row][col] = tile;
+				notValid = false;
+			}
+		}
+	}
+
+	//them o may man
+	private void addLucky() {
+		Random random = new Random();
+		boolean notValid = true;
+
+		while (notValid) {// kiem tra o ton tai
+			// chuyen doi tu 1 chieu sang 2 chieu
+			int location = random.nextInt(ROWS * COLS);
+			int row = location / COLS;
+			int col = location % ROWS;
+			Tile current = board[row][col];
+			if (current != null) {// kiểm tra vị trí hiện tại có ô nào không
+				current.setLucky(true);
+				notValid= false;
+			}
+		}
+	}
+	//xao tron bang
+	public void mixTile() {
+		Tile[][] newBoard = new Tile[ROWS][COLS];
+		for(int i =0; i<ROWS; i++) {
+			for(int j =0; j<COLS; j++) {
+				if(board[i][j]!=null) {
+					int value = board[i][j].getValue();
+					boolean lucky =board[i][j].isLucky();
+					addTile2(value, newBoard,lucky);
+				}
+			}
+		}
+		board= newBoard;
+	}
+	//kiem tra xem co o nao l o may man khong neu co thi xoa o may man di
+	private void checkLucky() {
+		for(int i =0; i<ROWS; i++) {
+			for(int j =0; j<COLS; j++) {
+				Tile current = board[i][j];
+				if(current!= null && current.isLucky()) {
+					current.setLucky(false);
+				}
+		}
+	}
+	}
 //kiem tra xem cac o co di chuyen duoc khong
 	private boolean move(int row, int col, int horizontalDirection, int verticalDirection, Direction dir) {
 		boolean canMove = false;
@@ -72,21 +129,47 @@ public class Board {
 			newRow += verticalDirection; // cot se truot theo chieu doc
 			if (checkOutOfBounds(dir, newRow, newCol))// kiem tra truot den vi tri hop le chua(den vach ngan chua)
 				break;
-			if (board[newRow][newCol] == null) {
+			if (board[newRow][newCol] == null||board[newRow][newCol].getValue()==0) {
 				board[newRow][newCol] = current;
 				board[newRow - verticalDirection][newCol - horizontalDirection] = null;// xóa các ô đã trượt qua
 				canMove = true;
 			} else if (board[newRow][newCol].getValue() == current.getValue()) {
-				board[newRow][newCol] = new Tile(board[newRow][newCol].getValue() * 2, newRow, newCol);
+				int value = board[newRow][newCol].getValue() + current.getValue();
+				if(board[newRow][newCol].isLucky()||current.isLucky()) {
+					value = board[newRow][newCol].getValue() + current.getValue();
+					board[newRow][newCol] = new Tile(value, newRow, newCol);
+				}
+				else board[newRow][newCol] = new Tile(value, newRow, newCol);
 				board[newRow - verticalDirection][newCol - horizontalDirection] = null;
 				canMove = true;
 				// add to score
 				score += board[newRow][newCol].getValue();
+				//3 o cong lai
+//			} else if (board[newRow][newCol].getValue() == current.getValue()) {
+//				int nCol = col-horizontalDirection;
+//				int nRow = row- verticalDirection ;
+//				try {
+//				if (board[nRow][nCol]!=null&&board[nRow][nCol].getValue() == current.getValue()) {
+//				board[newRow][newCol] = new Tile(board[newRow][newCol].getValue() * 3, newRow, newCol);
+//				board[newRow - verticalDirection][newCol - horizontalDirection] = null;
+//				board[nRow][nCol] = null;
+//				canMove = true;
+//				// add to score
+//				score += board[newRow][newCol].getValue();
+//				}else {
+//					board[newRow][newCol] = new Tile(board[newRow][newCol].getValue() * 2, newRow, newCol);
+//					board[newRow - verticalDirection][newCol - horizontalDirection] = null;
+//					canMove = true;
+//					// add to score
+//					score += board[newRow][newCol].getValue();
+//				}
+//				}catch(ArrayIndexOutOfBoundsException e) {
+//					continue;
+//				}
 			} else {
 				move = false;
 			}
 		}
-
 		return canMove;
 	}
 
@@ -95,19 +178,30 @@ public class Board {
 		if (dir == Direction.LEFT) {
 			return col < 0;
 		} else if (dir == Direction.RIGHT) {
-			return col > COLS - 1;
+			return col > COLS -1;
 		} else if (dir == Direction.UP) {
 			return row < 0;
 		} else if (dir == Direction.DOWN) {
 			return row > ROWS - 1;
+		}else if(dir==Direction.cheo7) {
+			return col<0||row<0;
+		}else if(dir==Direction.cheo9) {
+			return col > COLS -1||row<0;
+		}else if(dir==Direction.cheo1) {
+			return col<0||row > ROWS - 1;
+		}else if(dir==Direction.cheo3) {
+			return col > COLS -1||row > ROWS - 1;
 		}
 		return false;
 	}
 
 //dich chuyen
 	public void moveTiles(Direction dir) {
+		count++;
+		if(count>0&&count%7==0) addLucky();
+		if(count>0&&count%5==0) checkLucky();
 		boolean canMove = false;// bien co the di chuyen
-		saveBoard(boardHistory);
+		saveBoard(boardHistory, ScoreHistory);
 		int horizontalDirection = 0;// huong di chuyen theo chieu ngang
 		int verticalDirection = 0;// huong di chuyen theo chieu doc
 		sound.play("ting.wav", 0);
@@ -152,6 +246,50 @@ public class Board {
 						move(row, col, horizontalDirection, verticalDirection, dir);
 				}
 			}
+		}else if (dir == Direction.cheo7) {
+			verticalDirection = -1;
+			horizontalDirection=-1;
+			for (int row = 0; row < ROWS; row++) {
+				for (int col = 0; col < COLS; col++) {
+					if (!canMove)
+						canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+					else
+						move(row, col, horizontalDirection, verticalDirection, dir);
+				}
+			}
+		}else if (dir == Direction.cheo9) {
+			verticalDirection = -1;
+			horizontalDirection=1;
+			for (int row = 0; row < ROWS; row++) {
+				for (int col = 0; col < COLS; col++) {
+					if (!canMove)
+						canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+					else
+						move(row, col, horizontalDirection, verticalDirection, dir);
+				}
+			}
+		}else if (dir == Direction.cheo1) {
+			verticalDirection = 1;
+			horizontalDirection=-1;
+			for (int row = 0; row < ROWS; row++) {
+				for (int col = 0; col < COLS; col++) {
+					if (!canMove)
+						canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+					else
+						move(row, col, horizontalDirection, verticalDirection, dir);
+				}
+			}
+		}else if (dir == Direction.cheo3) {
+			verticalDirection = 1;
+			horizontalDirection=1;
+			for (int row = 0; row < ROWS; row++) {
+				for (int col = 0; col < COLS; col++) {
+					if (!canMove)
+						canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+					else
+						move(row, col, horizontalDirection, verticalDirection, dir);
+				}
+			}
 		}
 		// neu con co the di chuyen thi tao ra o moi bat ki
 		if (canMove) {
@@ -161,6 +299,12 @@ public class Board {
 				checkScore();
 			} else {
 				addTile();
+//				if(count>10) {
+//					dead = true;
+//					gameOn = false;
+//					checkScore();
+//				}
+//				System.out.println("count:"+count);
 //			addTile();
 			}
 		} else {
@@ -174,9 +318,10 @@ public class Board {
 	}
 
 	private boolean checkDead() {
+		System.out.println();
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
-				if (board[row][col] == null)// nếu còn ô trông là chưa chế
+				if (board[row][col] == null||board[row][col].getValue()==0)// nếu còn ô trông là chưa chết
 					return false;
 				if (checkSurroundingTiles(row, col, board[row][col])) {
 					return false;
@@ -264,56 +409,7 @@ public class Board {
 		addTile();
 		addTile();
 	}
-
-	public void show() {
-		System.out.println("-----------" + score + "-------------");
-		for (int i = 0; i < ROWS; i++) {
-			for (int j = 0; j < COLS; j++) {
-				if (board[i][j] != null)
-					System.out.print(board[i][j].getValue() + "  ");
-				else
-					System.out.print("0    ");
-			}
-			System.out.println();
-		}
-	}
-
-//	public static void main(String[] args) {
-//		String dir = "";
-//		Scanner sc = new Scanner(System.in);
-//		Board game = new Board(FileInput.readBoard(), FileInput.score);
-//		while (dir != "x") {
-//			game.show();
-//			dir = sc.nextLine();
-//			switch (dir) {
-//			case "4":
-//				game.moveTiles(Direction.LEFT);
-//				break;
-//			case "6":
-//				game.moveTiles(Direction.RIGHT);
-//
-//				break;
-//			case "8":
-//				game.moveTiles(Direction.UP);
-//
-//				break;
-//			case "2":
-//				game.moveTiles(Direction.DOWN);
-//
-//				break;
-//			case "n":
-//				game.reset();
-//				break;
-//			case "s":
-//				FileInput.writeBoard(game);
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-//		sc.close();
-//	}
-	private void saveBoard(Stack<Tile[][]> add) {
+	private void saveBoard(Stack<Tile[][]> add, Stack<Integer> add2) {
 		Tile[][] prevBoard = new Tile[ROWS][COLS];
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
@@ -321,12 +417,15 @@ public class Board {
 			}
 		}
 		add.push(prevBoard);
+		add2.push(score);
 	}
 	public void undo() {
 		if (!boardHistory.isEmpty()) { // kiểm tra xem stack lịch sử còn trống không
 //				saveBoard(redoBoard);
 			redoBoard.push(board);
 			board = boardHistory.pop();
+			redoScore.push(score);
+			score= ScoreHistory.pop();
 			// lấy trạng thái trước đó từ stack và khôi phục lại trạng thái của bàn chơi
 		} else {
 			board = new Tile[ROWS][COLS];
@@ -340,10 +439,25 @@ public class Board {
 		if (!redoBoard.isEmpty()) { // kiểm tra xem stack lịch sử còn trống không
 			boardHistory.push(board);
 			board = redoBoard.pop();
+			ScoreHistory.push(score);
+			score= redoScore.pop();
+			
 			// lấy trạng thái trước đó từ stack và khôi phục lại trạng thái của bàn chơi
 		}
 		if (!gameOn)
 			gameOn = true;
+	}
+	public void show() {
+		System.out.println("-----------" + score + "-------------");
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				if (board[i][j] != null)
+					System.out.print(board[i][j].getValue() + "  ");
+				else
+					System.out.print("0    ");
+			}
+			System.out.println();
+		}
 	}
 	public boolean isWin() {
 		return win;
@@ -384,12 +498,6 @@ public class Board {
 	public void setHighScore(int highScore) {
 		this.highScore = highScore;
 	}
-	/*
-	0    0    0    16  
-	0    16  32  256  
-	0    0    128  64  
-	128  16  64  16
-	 */
 
 	public Sound getSound() {
 		return sound;

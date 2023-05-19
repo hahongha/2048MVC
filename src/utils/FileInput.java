@@ -98,7 +98,7 @@ public class FileInput {
 						if(a!= 0) tiles[row][col] = new Tile(a, row, col);
 						else tiles[row][col] = new Tile();
 						}catch (NumberFormatException e) {
-							tiles[row][col]= new Tile(16,row, col);
+							tiles[row][col]= new Tile();
 							continue;
 						}
 					}

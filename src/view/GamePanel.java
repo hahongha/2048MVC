@@ -34,8 +34,6 @@ public class GamePanel extends JPanel{
 		key = new keyBoard(this, gameBoard);
 		addKeyListener(key);
 		setBackground(new Color(0x61876E));
-//		if(gameBoard.isGameOn())
-//		gameBoard.getSound().play("piano.wav", 1);
 	}
 	@Override
 	public void paintComponent(Graphics g) {
@@ -47,7 +45,6 @@ public class GamePanel extends JPanel{
 			renderEnd(g, Game2048.WIDTH, Game2048.HEIGHT);
 		}
 	}
-	// ve o
 
 	private void renderPlay(Graphics g) {
 		g.setColor(new Color(0x61876E));
@@ -173,7 +170,7 @@ public class GamePanel extends JPanel{
 				width / 2 - DrawUtils.getMessageWidth("Press N to reset game", fontforScore, g) / 2, y + 190);
 		g.drawString("Press X to exit game",
 				width / 2 - DrawUtils.getMessageWidth("Press X to exit game", fontforScore, g) / 2, y + 280);
-
+		
 		g.dispose();
 
 	}

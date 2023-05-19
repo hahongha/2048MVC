@@ -17,8 +17,9 @@ public class Game2048 {
 	public static final int HEIGHT = 700;
 	public JFrame window;
 	public GamePanel game;
-	private Title title;
+	public Title title;
 	private changePanel change;
+//	private mouseInput mouse;
 	public Game2048() {
 		window = new JFrame("2048 test");
 		title = new Title(this);
@@ -39,8 +40,8 @@ public class Game2048 {
 		btnCon.setBounds(Game2048.WIDTH/4, Game2048.HEIGHT*2/3,Game2048.WIDTH/2,70);
         title.add(next);
         title.add(btnCon);
+        
 		window.add(title);
-		
 		window.setVisible(true);// hien thi
 	}
 	public void movePanels(JPanel panel1, JPanel panel2) {
@@ -49,7 +50,6 @@ public class Game2048 {
 		panel2.requestFocusInWindow();
 		window.validate();
 	}
-	
 	public static void main(String[] args) {
 		new Game2048();
 	}

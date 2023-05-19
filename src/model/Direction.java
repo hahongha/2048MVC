@@ -5,4 +5,8 @@ public enum Direction {
 	RIGHT,
 	UP,
 	DOWN,
+	cheo7,
+	cheo9,
+	cheo1,
+	cheo3,
 }

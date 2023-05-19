@@ -55,14 +55,12 @@ public class Sound {
 	public void stop(String name) {
 		if(sound.get(name).isRunning()) {
 			sound.get(name).stop();
-			System.out.println("stop");
 		}
 	}
 	//tiep tuc
 	public void start(String name) {
 		if(!sound.get(name).isRunning()) {
 		sound.get(name).start();
-		System.out.println(sound.get(name).toString());
 		}
 	}
 	//bat tat nhac
